@@ -27,28 +27,27 @@ dy = np.transpose(dx)### your code should go here ###
 sigma = 1
 ### your code should go here ###
 filterlenght=3
-myresult=ex1.myconv2(dx,np.asarray(ex1.gauss1d(sigma,filterlenght)))
+gdx=ex1.myconv2(dx,np.asarray(ex1.gauss1d(sigma,filterlenght)))
 inbuiltresult=np.convolve(dx,ex1.gaussian_filter1d(np.ones(filterlenght),sigma))
-if np.isclose(myresult, inbuiltresult).all:
-    print("my dx works")
+if np.isclose(gdx, inbuiltresult).all:
+    print("my gdx works")
 else:
-    print("(my dx doesn't work")
+    print("(my gdx doesn't work")
 
-myresult=ex1.myconv2(dy,np.asarray(ex1.gauss1d(sigma,filterlenght)))
+gdy=ex1.myconv2(dy,np.asarray(ex1.gauss1d(sigma,filterlenght)))
 inbuiltresult=np.convolve(dy,ex1.gaussian_filter1d(np.ones(filterlenght),sigma))
-if np.isclose(myresult, inbuiltresult).all:
-    print("my dy works")
+if np.isclose(gdy, inbuiltresult).all:
+    print("my gdy works")
 else:
-    print("(my dy doesn't work")
+    print("(my gdy doesn't work")
 
-pass
 # gdx = ### your code should go here ###
 # gdy = ### your code should go here ###
 
 
 # 2.2
 # Gradient Edge Magnitude Map
-def create_edge_magn_image(image, dx, dy):
+def create_edge_magn_image(image, gdx, gdy):
     # this function created an eddge magnitude map of an image
     # for every pixel in the image, it assigns the magnitude of gradients
     # INPUTS
@@ -57,10 +56,17 @@ def create_edge_magn_image(image, dx, dy):
     # @gdy     : gradient along y axis
     # OUTPUTS
     # @ grad_mag_image  : 2d image same size as image, with the magnitude of gradients in every pixel
-    # @grad_dir_image   : 2d image same size as image, with the direcrion of gradients in every pixel
+    # @grad_dir_image   : 2d image same size as image, with the direction of gradients in every pixel
 
     ### your code should go here ###
+    Ix = ex1.myconv2(image, gdx)
+    Iy = ex1.myconv2(image, gdy)
+    # cutting step:
+    Ix = Ix[:image.shape[0], :image.shape[1]]
+    Iy = Iy[:image.shape[0], :image.shape[1]]
 
+    grad_mag_image = np.hypot(Ix, Iy)  # directly calculates the magnitude for each pixel
+    grad_dir_image = np.arctan2(Ix, Iy)
     return grad_mag_image, grad_dir_image
 
 
