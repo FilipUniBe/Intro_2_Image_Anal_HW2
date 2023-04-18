@@ -5,6 +5,7 @@ from skimage import color, io
 import matplotlib.pyplot as plt
 plt.rcParams['image.cmap'] = 'gray'
 import pdb
+import hw2_ex1_linear_filtering_template as ex1
 
 # load image
 img = io.imread('bird.jpg')
@@ -17,16 +18,26 @@ img = color.rgb2gray(img)
 # 2.1
 # Gradients
 # define a derivative operator
-dx = ### your code should go here ###
-dy = ### your code should go here ###
+dx = [-1,0,1]### your code should go here ###
+dy = [-1,0,1]### your code should go here ###
 
 # convolve derivative operator with a 1d gaussian filter with sigma = 1
 # You should end up with 2 1d edge filters,  one identifying edges in the x direction, and
 # the other in the y direction
 sigma = 1
+filterlenght=3
 ### your code should go here ###
-gdx = ### your code should go here ###
-gdy = ### your code should go here ###
+result=ex1.gauss1d(sigma,filterlenght)
+result=np.asarray(result)
+dx=np.asarray(dx)
+result=ex1.myconv2(dx,result)
+
+print("dx",ex1.myconv2(dx,np.array(ex1.mygauss(sigma,filterlenght))))
+print("dy",ex1.myconv2(dy,ex1.mygauss(sigma,filterlenght)))
+
+
+# gdx = ### your code should go here ###
+# gdy = ### your code should go here ###
 
 
 # 2.2

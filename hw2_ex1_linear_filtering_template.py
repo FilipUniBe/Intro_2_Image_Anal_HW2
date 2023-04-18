@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from mpmath import pi
 from scipy import signal
 #from scipy import datasets
+from scipy.ndimage import gaussian_filter1d
 
 plt.rcParams['image.cmap'] = 'gray'
 import time
@@ -43,14 +44,6 @@ def myconv2(myimage, myfilter):
     k, l = myfilter.shape
     #https://medium.com/analytics-vidhya/2d-convolution-using-python-numpy-43442ff5f381
     #https://www.allaboutcircuits.com/technical-articles/two-dimensional-convolution-in-image-processing/
-    if np.squeeze(myfilter).ndim == 1: #squeeze because empty dimensions
-        #myfilter = myfilter.reshape(1, -1)  # reshape to a row vector
-        #1D case
-        pass
-    else:
-        #2D case
-        pass
-
 
     #2D case
     newfilter=np.flipud(np.fliplr(myfilter))#flip filter downwards and leftwards
@@ -124,6 +117,7 @@ m,n,k,l=10,10,3,1
 myimage = np.random.random((m,n))
 myfilter = np.random.random((k,l))
 myresult = myconv2(myimage, myfilter)
+inbuiltresult = signal.convolve2d(myimage, myfilter, boundary='fill', mode='full')
 if np.isclose(myresult, inbuiltresult).all:
     print("(3,1)-1D filter case works")
 else:
@@ -135,5 +129,12 @@ plt.imshow(newimg)
 plt.axis('off')
 plt.title('new image')
 plt.show()
-mygauss=gauss1d(1,12)
+sigma, filter_length = 1, 11
+mygauss=gauss1d(sigma,filter_length)
 print("mygauss",mygauss)
+#comparision to built-in
+inbuiltresult=gaussian_filter1d(np.ones(filter_length),sigma)
+if np.isclose(mygauss, inbuiltresult).all:
+    print("mygauss works")
+else:
+    print("(mygauss doesn't work")
