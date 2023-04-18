@@ -9,6 +9,7 @@ from mpmath import pi
 from scipy import signal
 #from scipy import datasets
 from scipy.ndimage import gaussian_filter1d
+from math import floor, ceil
 
 plt.rcParams['image.cmap'] = 'gray'
 import time
@@ -44,10 +45,10 @@ def myconv2(myimage, myfilter):
     #k, l = myfilter.shape
     if np.ndim(myimage)>=2:
         m, n = myimage.shape
-
     else:
         myimage=myimage[np.newaxis]
         m, n = myimage.shape
+
     if np.ndim(myfilter)>=2:
         k, l = myfilter.shape
     else:
@@ -145,7 +146,14 @@ plt.show()
 sigma, filter_length = 1, 11
 mygauss=gauss1d(sigma,filter_length)
 #comparision to built-in
-inbuiltresult=gaussian_filter1d(np.ones(filter_length),sigma)
+feedvector=np.zeros(filter_length)
+if len(feedvector)%2==0:#even
+    feedvector[floor(len(feedvector)/2)]=1
+    feedvector[floor(len(feedvector)/2)-1]=1
+else:#odd
+    feedvector[floor(len(feedvector) / 2)]=1
+inbuiltresult=gaussian_filter1d(feedvector,sigma)
+
 if np.isclose(mygauss, inbuiltresult).all:
     print("mygauss works")
 else:

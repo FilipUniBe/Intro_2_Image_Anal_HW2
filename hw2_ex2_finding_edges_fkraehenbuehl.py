@@ -5,7 +5,7 @@ from skimage import color, io
 import matplotlib.pyplot as plt
 plt.rcParams['image.cmap'] = 'gray'
 import pdb
-import hw2_ex1_linear_filtering_template as ex1
+import hw2_ex1_linear_filtering_fkraehenbuehl as ex1
 from scipy import signal
 # load image
 img = io.imread('bird.jpg')
@@ -28,7 +28,7 @@ sigma = 1
 ### your code should go here ###
 filterlenght=3
 gdx=ex1.myconv2(dx,np.asarray(ex1.gauss1d(sigma,filterlenght)))
-inbuiltresult=np.convolve(dx,ex1.gaussian_filter1d(np.ones(filterlenght),sigma))
+inbuiltresult=np.convolve(dx,ex1.gaussian_filter1d(filterlenght,sigma))
 if np.isclose(gdx, inbuiltresult).all:
     print("my gdx works")
 else:
