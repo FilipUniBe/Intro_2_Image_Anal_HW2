@@ -18,24 +18,30 @@ img = color.rgb2gray(img)
 # 2.1
 # Gradients
 # define a derivative operator
-dx = [-1,0,1]### your code should go here ###
-dy = [-1,0,1]### your code should go here ###
+dx = np.array([-1,0,1])### your code should go here ###
+dy = np.transpose(dx)### your code should go here ###
 
 # convolve derivative operator with a 1d gaussian filter with sigma = 1
 # You should end up with 2 1d edge filters,  one identifying edges in the x direction, and
 # the other in the y direction
 sigma = 1
-filterlenght=3
 ### your code should go here ###
-result=ex1.gauss1d(sigma,filterlenght)
-result=np.asarray(result)
-dx=np.asarray(dx)
-result=ex1.myconv2(dx,result)
+filterlenght=3
+myresult=ex1.myconv2(dx,np.asarray(ex1.gauss1d(sigma,filterlenght)))
+inbuiltresult=np.convolve(dx,ex1.gaussian_filter1d(np.ones(filterlenght),sigma))
+if np.isclose(myresult, inbuiltresult).all:
+    print("my dx works")
+else:
+    print("(my dx doesn't work")
 
-print("dx",ex1.myconv2(dx,np.array(ex1.mygauss(sigma,filterlenght))))
-print("dy",ex1.myconv2(dy,ex1.mygauss(sigma,filterlenght)))
+myresult=ex1.myconv2(dy,np.asarray(ex1.gauss1d(sigma,filterlenght)))
+inbuiltresult=np.convolve(dy,ex1.gaussian_filter1d(np.ones(filterlenght),sigma))
+if np.isclose(myresult, inbuiltresult).all:
+    print("my dy works")
+else:
+    print("(my dy doesn't work")
 
-
+pass
 # gdx = ### your code should go here ###
 # gdy = ### your code should go here ###
 

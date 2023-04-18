@@ -40,8 +40,46 @@ def myconv2(myimage, myfilter):
     # img_filtered    : 2D filtered image, of size (m+k-1)x(n+l-1)
 
     ### your code should go here ###
-    m, n = myimage.shape
-    k, l = myfilter.shape
+    #m, n = myimage.shape
+    #k, l = myfilter.shape
+    if np.ndim(myimage)>=2:
+        m, n = myimage.shape
+
+    else:
+        myimage=myimage[np.newaxis]
+        m, n = myimage.shape
+    if np.ndim(myfilter)>=2:
+        k, l = myfilter.shape
+    else:
+        myfilter=myfilter[np.newaxis]
+        k, l = myfilter.shape
+
+    # except:
+    #     if(myimage.shape[0]==1):#column vector
+    #         m=myimage.shape
+    #         n=1
+    #     else:#row vector
+    #         m = 1
+    #         n = myimage.shape
+    # try:
+    #     k, l = myfilter.shape
+    # except:
+    #     if(myfilter.shape[0]==1):#column vector
+    #         k=myfilter.shape
+    #         l=1
+    #     else:#row vector
+    #         k = 1
+    #         l = myfilter.shape
+    # try:
+    #     k, l = myfilter.shape
+    # except:
+    #     if (myfilter.shape[0] == 1):#column vector
+    #         k = myimage.shape
+    #         l = 1
+    #     else:  # row vector
+    #         k = 1
+    #         l = myimage.shape
+
     #https://medium.com/analytics-vidhya/2d-convolution-using-python-numpy-43442ff5f381
     #https://www.allaboutcircuits.com/technical-articles/two-dimensional-convolution-in-image-processing/
 
@@ -80,7 +118,6 @@ def gauss1d(sigma, filter_length=20):
     else:
         #odd
         r = range(-int(filter_length / 2), int(filter_length / 2) + 1)
-    print("r",r)
     gauss_filter=[1 / (sigma * sqrt(2 * pi)) * exp(-float(x) ** 2 / (2 * sigma ** 2)) for x in r]
 
     return gauss_filter
@@ -131,7 +168,6 @@ plt.title('new image')
 plt.show()
 sigma, filter_length = 1, 11
 mygauss=gauss1d(sigma,filter_length)
-print("mygauss",mygauss)
 #comparision to built-in
 inbuiltresult=gaussian_filter1d(np.ones(filter_length),sigma)
 if np.isclose(mygauss, inbuiltresult).all:
