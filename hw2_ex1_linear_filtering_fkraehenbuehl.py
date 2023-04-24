@@ -62,7 +62,7 @@ def myconv2(myimage, myfilter):
 
     #2D case
     newfilter=np.flipud(np.fliplr(myfilter))#flip filter downwards and leftwards
-    newimage=np.pad(myimage,max(k-1,l-1))#zeropadding
+    newimage=np.pad(myimage,((k-1,k-1),(l-1,l-1)))#zeropadding
     img_filtered=np.zeros((m+k-1, n+l-1))
     for i in range(m + k - 1):
         for j in range(n + l - 1):
@@ -96,7 +96,7 @@ def gauss1d(sigma, filter_length=20):
         #odd
         r = range(-int(filter_length / 2), int(filter_length / 2) + 1)
     gauss_filter=[1 / (sigma * sqrt(2 * pi)) * exp(-float(x) ** 2 / (2 * sigma ** 2)) for x in r]
-
+    gauss_filter=np.asarray(gauss_filter)
     return gauss_filter
 
 ### your code should go here ###
@@ -112,7 +112,7 @@ myimage = np.random.random((m,n))
 myfilter = np.random.random((k,l))
 myresult = myconv2(myimage, myfilter)
 inbuiltresult = signal.convolve2d(myimage, myfilter, boundary='fill', mode='full')
-if np.isclose(myresult, inbuiltresult).all:
+if np.isclose(myresult, inbuiltresult).all():
     print("2D case works")
 else:
     print("2D case doesn't work")
@@ -122,7 +122,7 @@ myimage = np.random.random((m,n))
 myfilter = np.random.random((k,l))
 myresult = myconv2(myimage, myfilter)
 inbuiltresult = signal.convolve2d(myimage, myfilter, boundary='fill', mode='full')
-if np.isclose(myresult, inbuiltresult).all:
+if np.isclose(myresult, inbuiltresult).all():
     print("(1,3)-1D filter case works")
 else:
     print("(1,3)-1D filter case doesn't work")
@@ -132,7 +132,7 @@ myimage = np.random.random((m,n))
 myfilter = np.random.random((k,l))
 myresult = myconv2(myimage, myfilter)
 inbuiltresult = signal.convolve2d(myimage, myfilter, boundary='fill', mode='full')
-if np.isclose(myresult, inbuiltresult).all:
+if np.isclose(myresult, inbuiltresult).all():
     print("(3,1)-1D filter case works")
 else:
     print("(3,1)-1D filter case doesn't work")
@@ -154,7 +154,7 @@ else:#odd
     feedvector[floor(len(feedvector) / 2)]=1
 inbuiltresult=gaussian_filter1d(feedvector,sigma)
 
-if np.isclose(mygauss, inbuiltresult).all:
+if np.isclose(mygauss, inbuiltresult,rtol=1e-08, atol=1e-05).all():
     print("mygauss works")
 else:
     print("(mygauss doesn't work")

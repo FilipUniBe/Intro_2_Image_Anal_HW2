@@ -27,14 +27,19 @@ dy = np.array([-1,0,1]).reshape(-1,1)### your code should go here ###
 sigma = 1
 ### your code should go here ###
 filterlenght=3
-gdx=ex1.myconv2(dx,np.asarray(ex1.gauss1d(sigma,filterlenght)))
-inbuiltresult=np.convolve(dx,ex1.gaussian_filter1d(filterlenght,sigma))
+gdx=ex1.myconv2(dx,ex1.gauss1d(sigma,filterlenght))
+inbuiltresult=np.convolve(dx,ex1.gauss1d(sigma,filterlenght))
 if np.isclose(gdx, inbuiltresult).all:
     print("my gdx works")
 else:
     print("(my gdx doesn't work")
 
-gdy=ex1.myconv2(dy,np.asarray(ex1.gauss1d(sigma,filterlenght)))
+gdy=ex1.myconv2(dy,ex1.gauss1d(sigma,filterlenght))
+# inbuiltresult=np.convolve(dx,ex1.gauss1d(sigma,filterlenght))
+# if np.isclose(gdy, inbuiltresult).all:
+#     print("my gdx works")
+# else:
+#     print("(my gdx doesn't work")
 #gdy not directly testable by built-in function. meh.
 
 # gdx = ### your code should go here ###

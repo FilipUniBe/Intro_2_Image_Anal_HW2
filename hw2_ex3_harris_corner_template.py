@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 #import hw2_ex1_linear_filtering_template as ex1
 from scipy.ndimage import gaussian_filter1d
 from math import ceil, floor
+from scipy import signal
 
 import hw2_ex1_linear_filtering_fkraehenbuehl as ex1
 
@@ -44,13 +45,15 @@ def myharris(image, w_size, sigma, k):
     filter_length=3 #random
     sigma=1#temp to see something
     mygauss=ex1.gauss1d(sigma,filter_length)
-    mygauss=np.asarray(mygauss)
+    # mygauss=np.asarray(mygauss)
+    # gdx_inbuilt=signal.convolve(in1, in2, mode='full', method='auto')
+    # gdy_inbuilt=signal.convolve(in1, in2, mode='full', method='auto')
     gdx = ex1.myconv2(dx,mygauss)
     gdy = ex1.myconv2(dy,mygauss)
     Ix = ex1.myconv2(image, gdx)
     Iy = ex1.myconv2(image, gdy)
-    Ix = Ix[:height, :width]
-    Iy = Iy[:height, :width]
+    # Ix = Ix[:width, :height]
+    # Iy = Iy[:width, :height]
 
     # product of gradients at each pixel
     Ixx = Ix * Ix
@@ -62,20 +65,17 @@ def myharris(image, w_size, sigma, k):
     Syy = np.zeros((height, width))
     Sxy = np.zeros((height, width))
     offset = int(w_size / 2)  # to make sure windord doesnt get out of image
-    height_offset=1
-    width_offset=1
 
-    for y in range(offset, height_offset):
-        for x in range(offset, width_offset):
-            Sxx[x, y] = np.sum(Ixx[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
-            Syy[x, y] = np.sum(Iyy[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
-            Sxy[x, y] = np.sum(Ixy[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
+    for y in range(offset, height - offset):
+        for x in range(offset, width-offset):
+            Sxx[x][y] = np.sum(Ixx[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
+            Syy[x][y]  = np.sum(Iyy[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
+            Sxy[x][y]  = np.sum(Ixy[x - offset:x + 1 + offset, y - offset:y + 1 + offset])
 
     # Define at each pixel matrix, compute response
     det = (Sxx * Syy) - (Sxy ** 2)
     trace = Sxx + Syy
-    r = det - k * (trace ** 2)
-    R=r
+    R = det - k * (trace ** 2)
     return R
 # w_size=5
 # sigma=0.2
