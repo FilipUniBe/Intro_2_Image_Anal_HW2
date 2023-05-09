@@ -60,13 +60,35 @@ def myconv2(myimage, myfilter):
     #https://medium.com/analytics-vidhya/2d-convolution-using-python-numpy-43442ff5f381
     #https://www.allaboutcircuits.com/technical-articles/two-dimensional-convolution-in-image-processing/
 
-    #2D case
-    newfilter=np.flipud(np.fliplr(myfilter))#flip filter downwards and leftwards
-    newimage=np.pad(myimage,((k-1,k-1),(l-1,l-1)))#zeropadding
-    img_filtered=np.zeros((m+k-1, n+l-1))
-    for i in range(m + k - 1):
-        for j in range(n + l - 1):
-            img_filtered[i, j] = np.sum(newfilter * newimage[i:i + k, j:j + l])
+    # if filter is 2D => SVD
+    if 1==2:
+    # this was supposed to do a SVD if filter is 2D. but it's just too much work for such an assignment
+    #if myfilter.shape[0]>1 and myfilter.shape[1]>1:
+        #separate into two I guess
+        U, E, V = np.linalg.svd(myfilter)
+        #testfilter=np.dot(U[:, :E.shape[0]] * E, V)
+        newfilter = np.flipud(U[:, 0])  # flip filter downwards and leftwards
+        newimage = np.pad(myimage, ((k - 1, k - 1), (l - 1, l - 1)))  # zeropadding
+        img_filtered = np.zeros((m + k - 1, n + l - 1))
+        for i in range(m + k - 1):
+            for j in range(n + l - 1):
+                img_filtered[i, j] = np.sum(newfilter * newimage[i:i + k, j:j + l])
+
+
+        #newfilter=newfilter[np.newaxis]
+        newfilter = np.flip(V[0,:])   #flip filter downwards and leftwards
+        newfilter=newfilter[np.newaxis]
+        for i in range(m + k - 1):
+            for j in range(n + l - 1):
+                img_filtered[i, j] = np.sum(newfilter * img_filtered[i:i + k, j:j + l])
+
+    else:
+        newfilter=np.flipud(np.fliplr(myfilter))#flip filter downwards and leftwards
+        newimage=np.pad(myimage,((k-1,k-1),(l-1,l-1)))#zeropadding
+        img_filtered=np.zeros((m+k-1, n+l-1))
+        for i in range(m + k - 1):
+            for j in range(n + l - 1):
+                img_filtered[i, j] = np.sum(newfilter * newimage[i:i + k, j:j + l])
     return img_filtered
 
 
